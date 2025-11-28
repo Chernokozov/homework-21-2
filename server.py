@@ -8,16 +8,13 @@ class WebHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         """Обрабатываем все GET-запросы - возвращаем contacts.html"""
         try:
-            # Проверяем существование файла
             if not os.path.exists('contacts.html'):
                 self.send_error(404, "File contacts.html not found")
                 return
 
-            # Читаем HTML файл
             with open('contacts.html', 'r', encoding='utf-8') as file:
                 html_content = file.read()
 
-            # Отправляем ответ
             self.send_response(200)
             self.send_header('Content-type', 'text/html; charset=utf-8')
             self.end_headers()
@@ -35,15 +32,12 @@ class WebHandler(BaseHTTPRequestHandler):
             content_length = int(self.headers.get('Content-Length', 0))
             post_data = self.rfile.read(content_length).decode('utf-8')
 
-            # Парсим данные формы
             form_data = parse_qs(post_data)
 
-            # Выводим в консоль
             print("POST Data Received:")
             for key, values in form_data.items():
                 print(f"   {key}: {', '.join(values)}")
 
-            # Ответ пользователю
             self.send_response(200)
             self.send_header('Content-type', 'text/html; charset=utf-8')
             self.end_headers()
